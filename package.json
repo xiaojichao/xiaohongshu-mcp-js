@@ -1,0 +1,18 @@
+{
+  "name": "xiaohongshu-mcp-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "1498710037@qq.com",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "express": "^5.2.1",
+    "playwright": "^1.57.0"
+  }
+}
