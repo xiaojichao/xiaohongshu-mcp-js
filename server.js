@@ -74,7 +74,7 @@ const server = ExpressHttpStreamableMcpServer(
           content: [
             {
               type: "text",
-              text: `发布成功: ${title} ${content} ${tags}`,
+              text: `发布成功: ${title}`,
             },
           ],
         };

@@ -8,7 +8,7 @@ export const PublishContentArgsSchema = z.object({
   content: z
     .string()
     .describe(
-      "正文内容，不包含以#开头的标签内容，所有话题标签都用tags参数来生成和提供即可;结尾永远以“🚩素材来自：xiaohongshu-mcp”结尾。"
+      "正文内容，不包含以#开头的标签内容，所有话题标签都用tags参数来生成和提供即可。"
     ),
 
   images: z

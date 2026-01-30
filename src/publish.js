@@ -113,6 +113,7 @@ async function submitPublish(page, title, body, tags) {
   }
 
   await contentElem.fill(body);
+  await page.waitForTimeout(500);
   await inputTags(page, contentElem, tags);
 
   await page.waitForTimeout(500);
@@ -180,11 +181,33 @@ async function getContentElement(page) {
 async function inputTags(page, elem, tags) {
   if (!tags.length) return;
 
+  // 使用 JavaScript 确保光标移动到文档末尾
+  await elem.evaluate((el) => {
+    // 将光标移动到内容末尾
+    if (el.setSelectionRange) {
+      const length = el.value ? el.value.length : el.textContent.length;
+      el.setSelectionRange(length, length);
+    } else {
+      // 对于 contenteditable 元素
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(el);
+      range.collapse(false); // 移动到末尾
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+    el.focus();
+  });
+
+  await page.waitForTimeout(200);
   await elem.press("Enter");
   await elem.press("Enter");
 
   for (let tag of tags) {
-    tag = tag.replace(/^#/, "");
+    // 清理标签：移除 # 号和特殊字符，只保留中文、英文、数字
+    tag = tag.replace(/^#/, "").replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "");
+    
+    if (!tag) continue; // 跳过空标签
 
     await elem.type("#" + tag, { delay: 50 });
     await page.waitForTimeout(500);
@@ -193,7 +216,8 @@ async function inputTags(page, elem, tags) {
     if (item) {
       await item.click();
     } else {
-      await elem.type(" ");
+      // 如果没有找到建议项，按 Enter 键确认标签，而不是添加空格
+      await elem.press("Enter");
     }
 
     await page.waitForTimeout(300);
